@@ -18,12 +18,15 @@ public class Example4 {
 
     static Callable<String> staticRef;
 
+    private int value = 42;
+
     @Test
     public void closureAnonymousClass() throws Exception {
         // FIXME effectively final
         Person person = new Person("Иван", "Мельников", 33);
 
         staticRef = new Callable<String>() {
+
             @Override
             public String call() {
                 return person.getFirstName();
@@ -43,6 +46,11 @@ public class Example4 {
     @Test
     public void closureStatementLambda() throws Exception {
         Person person = new Person("Иван", "Мельников", 33);
+
+        staticRef = () -> {
+            String prefix = person.getAge() > 30 ? "Добрый день" : "Привет";
+            return prefix + ", " + person.getFirstName();
+        };
 
         String greeting = performInCurrentThread(() -> {
             String prefix = person.getAge() > 30 ? "Добрый день" : "Привет";
@@ -76,7 +84,15 @@ public class Example4 {
     public void closureReferenceByObjectMethodReferenceLambda() throws Exception {
         person = new Person("Иван", "Мельников", 33);
 
-        String firstName = performInCurrentThread(person::getFirstName);
+        Callable<String> getFirstName = this.person::getFirstName;
+        staticRef = getFirstName;
+        String firstName = performInCurrentThread(getFirstName);
+
+        person = null;
+
+        System.gc();
+
+        staticRef.call();
 
         assertEquals("Иван", firstName);
     }
@@ -114,34 +130,36 @@ public class Example4 {
     public void overwriteReferenceClosuredByExpressionLambdaAfterUsing() throws Exception {
         person = new Person("Иван", "Мельников", 33);
 
-        String firstName = performInCurrentThread(() -> person.getFirstName());
+        Callable<String> task = () -> person.getFirstName();
+        String firstName = performInCurrentThread(task);
+
+        // FIXME какое имя следует ожидать?
+        assertEquals("Иван", firstName);
 
         person = new Person("Алексей", "Игнатенко", 25);
 
-        // FIXME какое имя следует ожидать?
-        assertEquals(null, firstName);
+
+        assertEquals("Алексей", task.call());
     }
 
     @Test
     public void overwriteReferenceClosuredByObjectMethodReferenceLambdaAfterUsing() throws Exception {
         person = new Person("Иван", "Мельников", 33);
 
-        Callable<String> task = person::getFirstName;
+        Callable<String> task = this.person::getFirstName;
         String firstName = performInCurrentThread(task);
+        // FIXME какое имя следует ожидать?
+        assertEquals("Иван", firstName);
 
         person = new Person("Алексей", "Игнатенко", 25);
-
-        // FIXME какое имя следует ожидать?
-        assertEquals(null, firstName);
+        String name = task.call();
+        assertEquals("Иван", name);
     }
 
     private Callable<String> performLaterFromCurrentThread(Callable<String> task) {
-        return new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                System.out.println("Некий код перед выполнением задачи...");
-                return task.call();
-            }
+        return () -> {
+            System.out.println("Некий код перед выполнением задачи...");
+            return task.call();
         };
     }
 
@@ -149,14 +167,21 @@ public class Example4 {
     public void overwriteReferenceClosuredByExpressionLambdaBeforeUsing() throws Exception {
         person = new Person("Иван", "Мельников", 33);
 
-        Callable<String> delayedTask = performLaterFromCurrentThread(() -> person.getFirstName());
+        Callable<String> delayedTask = performLaterFromCurrentThread(() -> this.person.getFirstName());
 
         person = new Person("Алексей", "Игнатенко", 25);
 
         String firstName = delayedTask.call();
 
+
+        Supplier<String> getLastName = person::getLastName;
+        getLastName.get();
+
+        Function<Person, String> getLastName2 = Person::getLastName;
+        String apply = getLastName2.apply(person);
+
         // FIXME какое имя следует ожидать?
-        assertEquals(null, firstName);
+        assertEquals("Алексей", firstName);
     }
 
     @Test
@@ -170,7 +195,7 @@ public class Example4 {
         String firstName = delayedTask.call();
 
         // FIXME какое имя следует ожидать?
-        assertEquals(null, firstName);
+        assertEquals("Иван", firstName);
 
     }
 
@@ -189,6 +214,6 @@ public class Example4 {
         String firstName = delayedTask.call();
 
         // FIXME какое имя следует ожидать?
-        assertEquals(null, firstName);
+        assertEquals("Иван", firstName);
     }
 }

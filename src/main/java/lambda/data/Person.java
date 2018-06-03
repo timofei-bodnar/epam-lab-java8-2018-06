@@ -1,11 +1,12 @@
 package lambda.data;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Immutable.
  */
-public class Person {
+public class Person implements Serializable {
 
     private final String firstName;
     private final String lastName;
@@ -28,11 +29,17 @@ public class Person {
         age = 0;
     }
 
+//    public static String getLastName(Person person) {
+//        System.out.println("with param");
+//        return person.getLastName();
+//    }
+
     public String getFirstName(Person this) {
         return firstName;
     }
 
     public String getLastName() {
+        System.out.println("without param");
         return this.lastName;
     }
 
@@ -45,7 +52,7 @@ public class Person {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(Person this, Object other) {
         if (this == other) return true;
         if (other == null || getClass() != other.getClass()) return false;
         Person person = (Person) other;
