@@ -11,6 +11,7 @@ public class Exercise2 {
 
     @FunctionalInterface
     private interface Multiplier<T> {
+
         T multiply(T value, int multiplier);
 
         default T twice(T t) {
@@ -26,22 +27,32 @@ public class Exercise2 {
         assertEquals(0, multiplier.twice(0).intValue());
     }
 
+    @SuppressWarnings("Convert2Lambda")
     @Test
     public void implementsIntegerMultiplierUsingAnonymousClass() {
-        Multiplier<Integer> multiplier = null;
+        Multiplier<Integer> multiplier = new Multiplier<Integer>() { //NOSONAR
+            @Override
+            public Integer multiply(Integer value, int multiplier) {
+                return value * multiplier;
+            }
+        };
+
+        testIntegerMultiplier(multiplier);
+    }
+
+    @SuppressWarnings("CodeBlock2Expr")
+    @Test
+    public void implementsMultiplierUsingStatementLambda() {
+        Multiplier<Integer> multiplier = (value, multiplierValue) -> { //NOSONAR
+            return value * multiplierValue;
+        };
 
         testIntegerMultiplier(multiplier);
     }
 
     @Test
-    public void implementsMultiplierUsingStatementLambda() {
-        Multiplier<Integer> multiplier = null;
-
-        testIntegerMultiplier(multiplier);    }
-
-    @Test
     public void implementsIntegerMultiplierUsingExpressionLambda() {
-        Multiplier<Integer> multiplier = null;
+        Multiplier<Integer> multiplier = (value, multiplierValue) -> value * multiplierValue;
 
         testIntegerMultiplier(multiplier);
     }
@@ -56,7 +67,7 @@ public class Exercise2 {
 
     @Test
     public void implementsStringMultiplierUsingClassMethodReference() {
-        Multiplier<String> multiplier = null;
+        Multiplier<String> multiplier = Exercise2::multiplyString;
 
         assertEquals("aaa", multiplier.multiply("a", 3));
         assertEquals("", multiplier.multiply("qwerty", 0));
@@ -64,7 +75,7 @@ public class Exercise2 {
         assertEquals("", multiplier.twice(""));
     }
 
-    private final String delimiter = "-";
+    private final String delimiter = "-"; //NOSONAR
 
     private String stringSumWithDelimiter(String string, int number) {
         StringJoiner joiner = new StringJoiner(delimiter);
@@ -77,7 +88,7 @@ public class Exercise2 {
 
     @Test
     public void implementsStringMultiplierUsingObjectMethodReference() {
-        Multiplier<String> multiplier = null;
+        Multiplier<String> multiplier = this::stringSumWithDelimiter;
 
         assertEquals("a-a-a", multiplier.multiply("a", 3));
         assertEquals("", multiplier.multiply("qwerty", 0));
