@@ -1,5 +1,6 @@
 package lambda.part1.exercise;
 
+import com.google.common.collect.FluentIterable;
 import lambda.data.Person;
 import org.junit.Test;
 
@@ -12,25 +13,31 @@ import static org.junit.Assert.assertEquals;
 @SuppressWarnings({"ConstantConditions", "unused"})
 public class Exercise3 {
 
+    @SuppressWarnings("ComparatorCombinators")
     @Test
     public void sortPersonsByAgeUsingArraysSortExpressionLambda() {
         Person[] persons = getPersons();
 
-        // TODO использовать Arrays.sort + expression-lambda
+        Arrays.sort(persons, (leftPerson, rightPerson) ->
+            Integer.compare(leftPerson.getAge(), rightPerson.getAge()));
 
         assertArrayEquals(new Person[]{
-            new Person("Иван", "Мельников", 20),
-            new Person("Николай", "Зимов", 30),
-            new Person("Алексей", "Доренко", 40),
-            new Person("Артем", "Зимов", 45)
+            new Person("Иван", "Мельников", 20),    /*NOSONAR*/
+            new Person("Николай", "Зимов", 30),     /*NOSONAR*/
+            new Person("Алексей", "Доренко", 40),   /*NOSONAR*/
+            new Person("Артем", "Зимов", 45)        /*NOSONAR*/
         }, persons);
     }
 
+    @SuppressWarnings({"ComparatorCombinators", "CodeBlock2Expr"})
     @Test
     public void sortPersonsByLastNameThenFirstNameUsingArraysSortExpressionLambda() {
         Person[] persons = getPersons();
 
-        // TODO использовать Arrays.sort + statement-lambda
+        Arrays.sort(persons, (leftPerson, rightPerson) ->
+            leftPerson.getLastName().equals(rightPerson.getLastName()) ?
+                leftPerson.getFirstName().compareTo(rightPerson.getFirstName())
+                : leftPerson.getLastName().compareTo(rightPerson.getLastName()));
 
         assertArrayEquals(new Person[]{
             new Person("Алексей", "Доренко", 40),
@@ -40,14 +47,16 @@ public class Exercise3 {
         }, persons);
     }
 
+    @SuppressWarnings("Guava")
     @Test
     public void findFirstWithAge30UsingGuavaPredicateLambda() {
         List<Person> persons = Arrays.asList(getPersons());
 
-        // TODO использовать FluentIterable
-        Person person = null;
+        Person foundPerson = FluentIterable.from(persons)
+            .firstMatch(person -> person.getAge() == 30)
+            .orNull();
 
-        assertEquals(new Person("Николай", "Зимов", 30), person);
+        assertEquals(new Person("Николай", "Зимов", 30), foundPerson);
     }
 
     private Person[] getPersons() {
