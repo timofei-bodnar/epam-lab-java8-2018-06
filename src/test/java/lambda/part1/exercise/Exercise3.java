@@ -19,7 +19,7 @@ public class Exercise3 {
         Person[] persons = getPersons();
 
         // TODO использовать Arrays.sort + expression-lambda
-        Arrays.sort(persons, (left, right) -> left.getAge() - right.getAge());
+        Arrays.sort(persons, (left, right) -> Integer.compare(left.getAge(), right.getAge()));
 
         assertArrayEquals(new Person[]{
             new Person("Иван", "Мельников", 20),
@@ -56,7 +56,7 @@ public class Exercise3 {
         // TODO использовать FluentIterable
 
         Optional<Person> personOptional = FluentIterable.from(persons)
-            .firstMatch(person -> person.getAge() == 30);
+            .firstMatch(person -> Integer.compare(person.getAge(), 30) == 0);
 
         if (personOptional.isPresent()) {
             Person person = personOptional.get();
