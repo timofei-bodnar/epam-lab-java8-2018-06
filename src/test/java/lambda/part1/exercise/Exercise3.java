@@ -1,5 +1,7 @@
 package lambda.part1.exercise;
 
+import com.google.common.base.Optional;
+import com.google.common.collect.FluentIterable;
 import lambda.data.Person;
 import org.junit.Test;
 
@@ -17,6 +19,7 @@ public class Exercise3 {
         Person[] persons = getPersons();
 
         // TODO использовать Arrays.sort + expression-lambda
+        Arrays.sort(persons, (left, right) -> left.getAge() - right.getAge());
 
         assertArrayEquals(new Person[]{
             new Person("Иван", "Мельников", 20),
@@ -32,6 +35,12 @@ public class Exercise3 {
 
         // TODO использовать Arrays.sort + statement-lambda
 
+        Arrays.sort(persons, (left, right) -> {
+            int difference = left.getLastName().compareTo(right.getLastName());
+            return difference != 0 ? difference
+                : left.getFirstName().compareTo(right.getFirstName());
+        });
+
         assertArrayEquals(new Person[]{
             new Person("Алексей", "Доренко", 40),
             new Person("Артем", "Зимов", 45),
@@ -45,9 +54,15 @@ public class Exercise3 {
         List<Person> persons = Arrays.asList(getPersons());
 
         // TODO использовать FluentIterable
-        Person person = null;
 
-        assertEquals(new Person("Николай", "Зимов", 30), person);
+        Optional<Person> personOptional = FluentIterable.from(persons)
+            .firstMatch(person -> person.getAge() == 30);
+
+        if (personOptional.isPresent()) {
+            Person person = personOptional.get();
+
+            assertEquals(new Person("Николай", "Зимов", 30), person);
+        }
     }
 
     private Person[] getPersons() {
