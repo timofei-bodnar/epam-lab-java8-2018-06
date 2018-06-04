@@ -24,7 +24,7 @@ public class Exercise1 {
 
             @Override
             public int compare(Person left, Person right) {
-                return left.getAge() - right.getAge();
+                return Integer.compare(left.getAge(), right.getAge());
             }
         }
 
@@ -46,7 +46,7 @@ public class Exercise1 {
         Arrays.sort(persons, new Comparator<Person>() {
             @Override
             public int compare(Person left, Person right) {
-                return left.getAge() - right.getAge();
+                return Integer.compare(left.getAge(), right.getAge());
             }
         });
 
@@ -90,7 +90,7 @@ public class Exercise1 {
         Predicate<Person> isFirstAge30Checker = new Predicate<Person>() {
             @Override
             public boolean apply(Person person) {
-                return person.getAge() == 30;
+                return Integer.compare(person.getAge(), 30) == 0;
             }
         };
 
@@ -114,7 +114,7 @@ public class Exercise1 {
             .firstMatch(new Predicate<Person>() {
                 @Override
                 public boolean apply(Person person) {
-                    return person.getAge() == 30;
+                    return Integer.compare(person.getAge(), 30) == 0;
                 }
             });
 
