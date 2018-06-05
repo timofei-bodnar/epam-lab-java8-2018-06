@@ -11,6 +11,7 @@ import static org.junit.Assert.assertEquals;
 
 public class Exercise1 {
 
+
     @Test
     public void sortPersonsByAgeUsingArraysSortComparator() {
         Person[] persons = getPersons();
