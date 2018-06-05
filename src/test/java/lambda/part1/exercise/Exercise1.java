@@ -3,7 +3,9 @@ package lambda.part1.exercise;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
+
 import java.util.Comparator;
+
 import lambda.data.Person;
 import org.junit.Test;
 
@@ -31,10 +33,10 @@ public class Exercise1 {
         Arrays.sort(persons, new PersonsComparator());
 
         assertArrayEquals(new Person[]{
-            new Person("Иван", "Мельников", 20),
-            new Person("Николай", "Зимов", 30),
-            new Person("Алексей", "Доренко", 40),
-            new Person("Артем", "Зимов", 45)
+                new Person("Иван", "Мельников", 20),
+                new Person("Николай", "Зимов", 30),
+                new Person("Алексей", "Доренко", 40),
+                new Person("Артем", "Зимов", 45)
         }, persons);
     }
 
@@ -51,10 +53,10 @@ public class Exercise1 {
         });
 
         assertArrayEquals(new Person[]{
-            new Person("Иван", "Мельников", 20),
-            new Person("Николай", "Зимов", 30),
-            new Person("Алексей", "Доренко", 40),
-            new Person("Артем", "Зимов", 45)
+                new Person("Иван", "Мельников", 20),
+                new Person("Николай", "Зимов", 30),
+                new Person("Алексей", "Доренко", 40),
+                new Person("Артем", "Зимов", 45)
         }, persons);
     }
 
@@ -69,15 +71,15 @@ public class Exercise1 {
             public int compare(Person left, Person right) {
                 int difference = left.getLastName().compareTo(right.getLastName());
                 return difference != 0 ? difference
-                    : left.getFirstName().compareTo(right.getFirstName());
+                        : left.getFirstName().compareTo(right.getFirstName());
             }
         });
 
         assertArrayEquals(new Person[]{
-            new Person("Алексей", "Доренко", 40),
-            new Person("Артем", "Зимов", 45),
-            new Person("Николай", "Зимов", 30),
-            new Person("Иван", "Мельников", 20)
+                new Person("Алексей", "Доренко", 40),
+                new Person("Артем", "Зимов", 45),
+                new Person("Николай", "Зимов", 30),
+                new Person("Иван", "Мельников", 20)
         }, persons);
     }
 
@@ -95,13 +97,13 @@ public class Exercise1 {
         };
 
         Optional<Person> personOptional = FluentIterable.from(persons)
-            .firstMatch(isFirstAge30Checker);
+                .firstMatch(isFirstAge30Checker);
 
-        if (personOptional.isPresent()) {
-            Person person = personOptional.get();
 
-            assertEquals(new Person("Николай", "Зимов", 30), person);
-        }
+        Person person = personOptional.orNull();
+
+        assertEquals(new Person("Николай", "Зимов", 30), person);
+
     }
 
     @Test
@@ -111,26 +113,25 @@ public class Exercise1 {
         // TODO использовать FluentIterable
 
         Optional<Person> personOptional = FluentIterable.from(persons)
-            .firstMatch(new Predicate<Person>() {
-                @Override
-                public boolean apply(Person person) {
-                    return person.getAge() == 30;
-                }
-            });
+                .firstMatch(new Predicate<Person>() {
+                    @Override
+                    public boolean apply(Person person) {
+                        return person.getAge() == 30;
+                    }
+                });
 
-        if (personOptional.isPresent()) {
-            Person person = personOptional.get();
+        Person person = personOptional.orNull();
 
-            assertEquals(new Person("Николай", "Зимов", 30), person);
-        }
+        assertEquals(new Person("Николай", "Зимов", 30), person);
+
     }
 
     private Person[] getPersons() {
         return new Person[]{
-            new Person("Иван", "Мельников", 20),
-            new Person("Алексей", "Доренко", 40),
-            new Person("Николай", "Зимов", 30),
-            new Person("Артем", "Зимов", 45)
+                new Person("Иван", "Мельников", 20),
+                new Person("Алексей", "Доренко", 40),
+                new Person("Николай", "Зимов", 30),
+                new Person("Артем", "Зимов", 45)
         };
     }
 }
