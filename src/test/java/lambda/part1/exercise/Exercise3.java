@@ -47,7 +47,7 @@ public class Exercise3 {
     public void findFirstWithAge30UsingGuavaPredicateLambda() {
         List<Person> persons = Arrays.asList(getPersons());
 
-        Person person = FluentIterable.from(persons).firstMatch(p1 -> p1.getAge() == 30).get();
+        Person person = FluentIterable.from(persons).firstMatch(p1 -> p1.getAge() == 30).orNull();
 
         assertEquals(new Person("Николай", "Зимов", 30), person);
     }
