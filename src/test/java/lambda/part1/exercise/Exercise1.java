@@ -21,10 +21,10 @@ public class Exercise1 {
         Arrays.sort(persons, Comparator.comparingInt(Person::getAge));
 
         assertArrayEquals(new Person[]{
-            new Person("Иван", "Мельников", 20),
-            new Person("Николай", "Зимов", 30),
-            new Person("Алексей", "Доренко", 40),
-            new Person("Артем", "Зимов", 45)
+                new Person("Иван", "Мельников", 20),
+                new Person("Николай", "Зимов", 30),
+                new Person("Алексей", "Доренко", 40),
+                new Person("Артем", "Зимов", 45)
         }, persons);
     }
 
@@ -40,10 +40,10 @@ public class Exercise1 {
         });
 
         assertArrayEquals(new Person[]{
-            new Person("Иван", "Мельников", 20),
-            new Person("Николай", "Зимов", 30),
-            new Person("Алексей", "Доренко", 40),
-            new Person("Артем", "Зимов", 45)
+                new Person("Иван", "Мельников", 20),
+                new Person("Николай", "Зимов", 30),
+                new Person("Алексей", "Доренко", 40),
+                new Person("Артем", "Зимов", 45)
         }, persons);
     }
 
@@ -62,10 +62,10 @@ public class Exercise1 {
         });
 
         assertArrayEquals(new Person[]{
-            new Person("Алексей", "Доренко", 40),
-            new Person("Артем", "Зимов", 45),
-            new Person("Николай", "Зимов", 30),
-            new Person("Иван", "Мельников", 20)
+                new Person("Алексей", "Доренко", 40),
+                new Person("Артем", "Зимов", 45),
+                new Person("Николай", "Зимов", 30),
+                new Person("Иван", "Мельников", 20)
         }, persons);
     }
 
@@ -80,7 +80,7 @@ public class Exercise1 {
             }
         };
 
-        Person person = FluentIterable.from(persons).filter(predicate).get(0);
+        Person person = FluentIterable.from(persons).firstMatch(predicate).get();
 
         assertEquals(new Person("Николай", "Зимов", 30), person);
     }
@@ -89,22 +89,22 @@ public class Exercise1 {
     public void findFirstWithAge30UsingGuavaAnonymousPredicate() {
         List<Person> persons = Arrays.asList(getPersons());
 
-        Person person = FluentIterable.from(persons).filter(new Predicate<Person>() {
+        Person person = FluentIterable.from(persons).firstMatch(new Predicate<Person>() {
             @Override
             public boolean apply(Person person) {
                 return person.getAge() == 30;
             }
-        }).get(0);
+        }).get();
 
         assertEquals(new Person("Николай", "Зимов", 30), person);
     }
 
     private Person[] getPersons() {
         return new Person[]{
-            new Person("Иван", "Мельников", 20),
-            new Person("Алексей", "Доренко", 40),
-            new Person("Николай", "Зимов", 30),
-            new Person("Артем", "Зимов", 45)
+                new Person("Иван", "Мельников", 20),
+                new Person("Алексей", "Доренко", 40),
+                new Person("Николай", "Зимов", 30),
+                new Person("Артем", "Зимов", 45)
         };
     }
 }
