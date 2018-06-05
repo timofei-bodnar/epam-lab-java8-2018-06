@@ -1,21 +1,21 @@
 package lambda.part1.exercise;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.util.StringJoiner;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 @SuppressWarnings({"FieldCanBeLocal", "ConstantConditions", "unused"})
 public class Exercise2 {
 
-    @FunctionalInterface
-    private interface Multiplier<T> {
-        T multiply(T value, int multiplier);
+    private final String delimiter = "-";
 
-        default T twice(T t) {
-            return multiply(t, 2);
+    private static String multiplyString(String string, int number) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < number; ++i) {
+            builder.append(string);
         }
+        return builder.toString();
     }
 
     private void testIntegerMultiplier(Multiplier<Integer> multiplier) {
@@ -31,7 +31,7 @@ public class Exercise2 {
         Multiplier<Integer> multiplier = new Multiplier<Integer>() {
             @Override
             public Integer multiply(Integer value, int multiplier) {
-                return multiplier*value;
+                return multiplier * value;
             }
         };
 
@@ -41,25 +41,18 @@ public class Exercise2 {
     @Test
     public void implementsMultiplierUsingStatementLambda() {
         Multiplier<Integer> multiplier =
-            (value ,multiplier1) -> {
-            return value*multiplier1;
-        };
-
-        testIntegerMultiplier(multiplier);    }
-
-    @Test
-    public void implementsIntegerMultiplierUsingExpressionLambda() {
-        Multiplier<Integer> multiplier = (val,mul)->val*mul;
+            (value, multiplierValue) -> {
+                return value * multiplierValue;
+            };
 
         testIntegerMultiplier(multiplier);
     }
 
-    private static String multiplyString(String string, int number) {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < number; ++i) {
-            builder.append(string);
-        }
-        return builder.toString();
+    @Test
+    public void implementsIntegerMultiplierUsingExpressionLambda() {
+        Multiplier<Integer> multiplier = (val, mul) -> val * mul;
+
+        testIntegerMultiplier(multiplier);
     }
 
     @Test
@@ -71,8 +64,6 @@ public class Exercise2 {
         assertEquals("aAaA", multiplier.twice("aA"));
         assertEquals("", multiplier.twice(""));
     }
-
-    private final String delimiter = "-";
 
     private String stringSumWithDelimiter(String string, int number) {
         StringJoiner joiner = new StringJoiner(delimiter);
@@ -91,5 +82,15 @@ public class Exercise2 {
         assertEquals("", multiplier.multiply("qwerty", 0));
         assertEquals("A-A", multiplier.twice("A"));
         assertEquals("", multiplier.twice(""));
+    }
+
+    @FunctionalInterface
+    private interface Multiplier<T> {
+
+        T multiply(T value, int multiplier);
+
+        default T twice(T t) {
+            return multiply(t, 2);
+        }
     }
 }
