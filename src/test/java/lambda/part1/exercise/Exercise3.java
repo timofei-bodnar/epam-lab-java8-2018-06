@@ -32,13 +32,9 @@ public class Exercise3 {
     public void sortPersonsByLastNameThenFirstNameUsingArraysSortExpressionLambda() {
         Person[] persons = getPersons();
 
-        // TODO использовать Arrays.sort + statement-lambda
-        Arrays.sort(persons, (p1, p2) -> {
-            int lastNameCompare = p1.getLastName().compareTo(p2.getLastName());
-            return lastNameCompare == 0 ?
-                    p1.getFirstName().compareTo(p2.getFirstName()) :
-                    lastNameCompare;
-        });
+        Arrays.sort(persons, (p1, p2) -> p1.getLastName().compareTo(p2.getLastName()) == 0
+                ? p1.getFirstName().compareTo(p2.getFirstName())
+                : p1.getLastName().compareTo(p2.getLastName()));
 
         assertArrayEquals(new Person[]{
             new Person("Алексей", "Доренко", 40),
@@ -55,7 +51,7 @@ public class Exercise3 {
         // TODO использовать FluentIterable
         Person person = FluentIterable.from(persons)
                 .firstMatch(p -> (p.getAge() == 30))
-                .get();
+                .orNull();
 
         assertEquals(new Person("Николай", "Зимов", 30), person);
     }
