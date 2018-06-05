@@ -21,10 +21,7 @@ public class Exercise1 {
         class PersonComparator implements Comparator<Person> {
             @Override
             public int compare(Person o1, Person o2) {
-                if (o1.getAge() == o2.getAge()) {
-                    return 0;
-                }
-                return o1.getAge() > o2.getAge() ? 1 : -1;
+                return Integer.compare(o1.getAge(), o2.getAge());
             }
         }
 
@@ -45,10 +42,7 @@ public class Exercise1 {
         Arrays.sort(persons, new Comparator<Person>() {
             @Override
             public int compare(Person o1, Person o2) {
-                if (o1.getAge() == o2.getAge()) {
-                    return 0;
-                }
-                return o1.getAge() > o2.getAge() ? 1 : -1;
+                return Integer.compare(o1.getAge(), o2.getAge());
             }
         });
 
@@ -94,7 +88,7 @@ public class Exercise1 {
         }
         Person person = FluentIterable.from(persons)
                                         .firstMatch(new Age30Predicate())
-                                        .get();
+                                        .orNull();
 
         assertEquals(new Person("Николай", "Зимов", 30), person);
     }
@@ -110,7 +104,7 @@ public class Exercise1 {
                     public boolean apply(Person person) {
                         return (person.getAge()==30);
                     }
-                }).get();
+                }).orNull();
 
         assertEquals(new Person("Николай", "Зимов", 30), person);
     }
