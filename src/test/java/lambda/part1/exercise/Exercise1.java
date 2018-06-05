@@ -84,7 +84,7 @@ public class Exercise1 {
                 return person.getAge() == 30;
             }
         }
-        Person person = FluentIterable.from(persons).firstMatch(new PredicatePerson()).get();
+        Person person = FluentIterable.from(persons).firstMatch(new PredicatePerson()).orNull();
 
         assertEquals(new Person("Николай", "Зимов", 30), person);
     }
@@ -100,7 +100,7 @@ public class Exercise1 {
                 return person.getAge() == 30;
             }
         };
-        Person person = FluentIterable.from(persons).firstMatch(predicate).get();
+        Person person = FluentIterable.from(persons).firstMatch(predicate).orNull();
 
         assertEquals(new Person("Николай", "Зимов", 30), person);
     }
