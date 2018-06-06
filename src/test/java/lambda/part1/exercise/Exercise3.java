@@ -32,7 +32,7 @@ public class Exercise3 {
     public void sortPersonsByLastNameThenFirstNameUsingArraysSortExpressionLambda() {
         Person[] persons = getPersons();
 
-        Arrays.sort(persons, (p1, p2) -> p1.getLastName().compareTo(p2.getLastName()) == 0
+        Arrays.sort(persons, (p1, p2) -> p1.getLastName().equals(p2.getLastName())
                 ? p1.getFirstName().compareTo(p2.getFirstName())
                 : p1.getLastName().compareTo(p2.getLastName()));
 
