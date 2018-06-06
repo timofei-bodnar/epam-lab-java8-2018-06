@@ -31,7 +31,7 @@ public class Exercise2 {
         Multiplier<Integer> multiplier = new Multiplier<Integer>() {
             @Override
             public Integer multiply(Integer value, int multiplier) {
-                return value*multiplier;
+                return value * multiplier;
             }
         };
 
@@ -41,7 +41,7 @@ public class Exercise2 {
     @Test
     public void implementsMultiplierUsingStatementLambda() {
         Multiplier<Integer> multiplier = (Integer v, int m) -> {
-            return v*m;
+            return v * m;
         };
 
         testIntegerMultiplier(multiplier);
