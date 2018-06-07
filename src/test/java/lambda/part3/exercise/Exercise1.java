@@ -1,16 +1,16 @@
 package lambda.part3.exercise;
 
-import lambda.data.Employee;
-import lambda.data.JobHistoryEntry;
-import lambda.data.Person;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
+import java.util.function.Function;
+import lambda.data.Employee;
+import lambda.data.JobHistoryEntry;
+import lambda.data.Person;
+import org.junit.Test;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class Exercise1 {
@@ -20,11 +20,20 @@ public class Exercise1 {
         List<Employee> employees = getEmployees();
         List<Integer> lengths = new ArrayList<>();
 
-        // TODO функция извлечения информации о человеке из объекта сотрудника personExtractor: Employee -> Person
-        // TODO функция извлечения полного имени из информации о человеке fullNameExtractor: Person -> String
-        // TODO функция извлечения длины из строки stringLengthExtractor: String -> Integer
-        // TODO функция извлечения длины полного имени из сотрудника fullNameLengthExtractor: Employee -> Integer
-        // TODO преобразование списка employees в lengths используя fullNameLengthExtractor
+        // Функция извлечения информации о человеке из объекта сотрудника personExtractor: Employee -> Person
+        Function<Employee, Person> personExtractor = Employee::getPerson;
+        // Функция извлечения полного имени из информации о человеке fullNameExtractor: Person -> String
+        Function<Person, String> fullNameExtractor = Person::getFullName;
+        // Функция извлечения длины из строки stringLengthExtractor: String -> Integer
+        Function<String, Integer> stringLengthExtractor = String::length;
+        // Функция извлечения длины полного имени из сотрудника fullNameLengthExtractor: Employee -> Integer
+        Function<Employee, Integer> fullNameLengthExtractor = personExtractor
+                .andThen(fullNameExtractor)
+                .andThen(stringLengthExtractor);
+        // Преобразование списка employees в lengths используя fullNameLengthExtractor
+        for (Employee employee : employees) {
+            lengths.add(fullNameLengthExtractor.apply(employee));
+        }
 
         assertEquals(Arrays.asList(14, 19, 14, 15, 14, 16), lengths);
     }
