@@ -1,10 +1,12 @@
 package api.exercise;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+
 import org.junit.Test;
 
 import java.util.function.BinaryOperator;
-
-import static org.junit.Assert.*;
 
 public class Exercise2 {
 
@@ -39,15 +41,24 @@ public class Exercise2 {
     }
 
     /**
-     * Выполняет операцию сканирования в однопоточном режиме.
-     * Не модифицирует исходный набор данных.
+     * Выполняет операцию сканирования в однопоточном режиме. Не модифицирует исходный набор
+     * данных.
+     *
      * @param source Массив исходных элементов.
      * @param operator Оператор сканирования.
      * @return Результат сканирования.
      * @see <a href="https://habr.com/company/epam_systems/blog/247805">Сканирование</a>
      */
     private static <T> T[] sequentialPrefix(T[] source, BinaryOperator<T> operator) {
-        throw new UnsupportedOperationException();
+        T[] cloned = source.clone();
+        int n = source.length;
+        for (int step = 0; step < log2(n) + 1; step++) {
+            int dist = pow(2, step);
+            for (int i = n - 1; i > dist - 1; i--) {
+                cloned[i] = operator.apply(cloned[i], cloned[i - dist]);
+            }
+        }
+        return cloned;
     }
 
     @Test
@@ -71,12 +82,16 @@ public class Exercise2 {
 
     /**
      * Вычисляет двоичный логарифм положительного числа.
+     *
      * @param value Аргумент.
      * @return Логарифм по основанию 2 от аргумента.
      * @throws IllegalArgumentException Если {@code value <= 0}
      */
     private static int log2(int value) throws IllegalArgumentException {
-        throw new UnsupportedOperationException();
+        if (value <= 0) {
+            throw new IllegalArgumentException();
+        }
+        return (int) (Math.log(value) / Math.log(2.0));
     }
 
     @Test
@@ -101,12 +116,23 @@ public class Exercise2 {
 
     /**
      * Возводит неотрицательное число в неотрицательную степень.
+     *
      * @param base Основание степени.
      * @param degree Показатель степени.
      * @return Значение {@code base}<sup>{@code degree}</sup>
      * @throws IllegalArgumentException Если {@code base < 0} или {@code degree < 0}
      */
     private static int pow(int base, int degree) throws IllegalArgumentException {
-        throw new UnsupportedOperationException();
+        if (base < 0 || degree < 0) {
+            throw new IllegalArgumentException();
+        }
+        if (degree == 0) {
+            return 1;
+        }
+        if (base == 0) {
+            return 0;
+        }
+
+        return base * pow(base, degree - 1);
     }
 }
