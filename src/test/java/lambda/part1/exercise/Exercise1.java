@@ -65,7 +65,7 @@ public class Exercise1 {
         Arrays.sort(persons, new Comparator<Person>() {
             @Override
             public int compare(Person o1, Person o2) {
-                String fullName1 = o1.getLastName() + o1.getLastName();
+                String fullName1 = o1.getLastName() + o1.getFirstName();
                 String fullName2 = o2.getLastName() + o2.getFirstName();
                 return fullName1.compareTo(fullName2);
             }
