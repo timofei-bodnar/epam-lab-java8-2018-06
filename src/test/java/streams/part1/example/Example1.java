@@ -5,10 +5,7 @@ import lambda.data.JobHistoryEntry;
 import lambda.data.Person;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -25,15 +22,53 @@ public class Example1 {
         Stream<JobHistoryEntry> stream4 = stream3.flatMap(Collection::stream);
         Stream<JobHistoryEntry> stream5 = stream4.peek(System.out::println);
         Stream<JobHistoryEntry> stream6 = stream5.distinct();
+        Stream<JobHistoryEntry> stream7 = stream6.sorted(Comparator.comparingInt(JobHistoryEntry::getDuration));
+        Stream<JobHistoryEntry> stream8 = stream7.parallel();
+        Stream<JobHistoryEntry> stream9 = stream8.sequential();
+        Stream<JobHistoryEntry> stream10 = stream9.unordered();
+        Stream<JobHistoryEntry> stream11 = stream10.skip(1);
+        Stream<JobHistoryEntry> stream12 = stream11.limit(10);
 
+        long count = stream12.count();
+        Optional<JobHistoryEntry> any = stream12.findAny();
+        Optional<JobHistoryEntry> first = stream12.findFirst();
+        boolean allDev = stream12.allMatch(entry -> "dev".equals(entry.getPosition()));
+        boolean anyQa = stream12.anyMatch(entry -> "qa".equals(entry.getPosition()));
+        boolean none = stream12.noneMatch(entry -> "qa".equals(entry.getPosition()));
+        stream12.forEach(System.out::println);
+        stream12.forEachOrdered(System.out::println);
+        Optional<JobHistoryEntry> max = stream12.max(Comparator.comparingInt(JobHistoryEntry::getDuration));
+        Optional<JobHistoryEntry> min = stream12.min(Comparator.comparingInt(JobHistoryEntry::getDuration));
+        Object[] objects = stream12.toArray();
+        JobHistoryEntry[] jobHistoryEntries = stream12.toArray(JobHistoryEntry[]::new);
+        Iterator<JobHistoryEntry> iterator = stream12.iterator();
+        stream12.reduce(null);
+        stream12.collect(null);
     }
 
     /**
      *            filter map flatMap peek distinct unordered sorted skip limit sequential parallel
-     * XXX              |   |       |    |        |         |      |    |     |          |
+     * IMMUTABLE        |   |       |    |        |         |      |    |     |          |
+     * CONCURRENT       |   |       |    |        |         |      |    |     |          |
+     * DISTINCT         | - |   -   |    |   +    |         |      |    |     |          |
+     * NONNULL          | - |   -   |    |        |         |      |    |     |          |
+     * ORDERED          |   |       |    |        |    -    |   +  |    |     |          |
+     * SORTED           | - |   -   |    |        |         |      |    |     |          |
+     * SIZED        -   |   |   -   |    |   -    |         |      |    |  +  |          |
+     * SUBSIZED         |   |       |    |        |         |      |    |     |          |
      */
     @Test
     public void singleUsageStream() {
+        List<Employee> employees = getEmployees();
+        Stream<Employee> source = getEmployees().stream();
+
+
+
+        Stream<Person> personStream = source.map(Employee::getPerson);
+
+        Stream<List<JobHistoryEntry>> anotherStream = source.map(Employee::getJobHistory);
+
+
     }
 
     public static List<Employee> getEmployees() {
