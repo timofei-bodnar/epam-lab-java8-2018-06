@@ -50,8 +50,8 @@ public class Exercise1 {
 
     private static BiFunction<Person, Person, Integer> createExtractorAgeOfPersonWithTheLongestFullName(
             Function<Person, String> function) {
-        return (p1, p2) -> function.apply(p1).compareTo(function.apply(p2)) >= 0 ? p1.getAge()
-                : p1.getAge();
+        return (p1, p2) -> function.apply(p1).length() >= function.apply(p2).length() ? p1.getAge()
+                : p2.getAge();
     }
 
     @Test
