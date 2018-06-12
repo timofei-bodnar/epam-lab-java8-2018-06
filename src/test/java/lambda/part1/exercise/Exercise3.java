@@ -1,5 +1,6 @@
 package lambda.part1.exercise;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import lambda.data.Person;
 import org.junit.Test;
@@ -31,10 +32,9 @@ public class Exercise3 {
     public void sortPersonsByLastNameThenFirstNameUsingArraysSortExpressionLambda() {
         Person[] persons = getPersons();
 
-        Arrays.sort(persons, (o1, o2) -> {
-            return o1.getLastName().equalsIgnoreCase(o2.getLastName()) ? o1.getFirstName().compareToIgnoreCase(o2.getFirstName())
-                    : o1.getLastName().compareToIgnoreCase(o2.getLastName());
-        });
+        Arrays.sort(persons,
+                (o1, o2) -> o1.getLastName().equalsIgnoreCase(o2.getLastName()) ? o1.getFirstName().compareToIgnoreCase(o2.getFirstName())
+                                                                                : o1.getLastName().compareToIgnoreCase(o2.getLastName()));
 
         assertArrayEquals(new Person[]{
                 new Person("Алексей", "Доренко", 40),
