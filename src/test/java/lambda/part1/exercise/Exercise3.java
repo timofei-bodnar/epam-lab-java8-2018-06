@@ -56,13 +56,11 @@ public class Exercise3 {
         // TODO использовать FluentIterable
 
         Optional<Person> personOptional = FluentIterable.from(persons)
-            .firstMatch(person -> Integer.compare(person.getAge(), 30) == 0);
+            .firstMatch(person -> person.getAge() == 30);
 
-        if (personOptional.isPresent()) {
-            Person person = personOptional.get();
+        Person person = personOptional.orNull();
 
-            assertEquals(new Person("Николай", "Зимов", 30), person);
-        }
+        assertEquals(new Person("Николай", "Зимов", 30), person);
     }
 
     private Person[] getPersons() {
