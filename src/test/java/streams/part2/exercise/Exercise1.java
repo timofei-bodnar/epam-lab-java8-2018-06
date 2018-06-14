@@ -19,7 +19,7 @@ public class Exercise1 {
         // TODO реализация
         Long hours = null;
 
-        assertEquals(18, hours.longValue());
+        assertEquals(19, hours.longValue());
     }
 
     @Test
