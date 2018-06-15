@@ -12,7 +12,8 @@ public class Example5 {
 
     @Test
     public void test() {
-        Stream<String> stringStream = IntStream.of(2, 1, 3, 5, 7, 1, 2, 3)
+        IntStream intStream = IntStream.of(2, 1, 3, 5, 7, 1, 2, 3);
+        Stream<String> stringStream = intStream
                                                .filter(value -> value < 5)
                                                .peek(System.out::println)
                                                .distinct()

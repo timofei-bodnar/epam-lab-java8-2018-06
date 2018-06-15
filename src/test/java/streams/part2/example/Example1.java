@@ -116,7 +116,8 @@ public class Example1 {
 
     @Test
     public void collectPersonToStringUsingLambdasStringJoiner() {
-        String result = IntStream.range(0, 5)
+        String result = IntStream.range(0, 10)
+                                 .filter(value -> value < 5)
                                  .parallel()
                                  .mapToObj(String::valueOf)
                                  .collect(() -> new StringJoiner(", "), StringJoiner::add, StringJoiner::merge)

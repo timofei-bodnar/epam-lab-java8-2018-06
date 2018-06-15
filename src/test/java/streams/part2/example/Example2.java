@@ -228,7 +228,7 @@ public class Example2 {
         Map<Boolean, List<Person>> moreThan40Years = lambda.part3.example.Example1.getEmployees()
                                                                                   .stream()
                                                                                   .map(Employee::getPerson)
-                                                                                  .collect(Collectors.groupingBy(person -> person.getAge() > 10));
+                                                                                  .collect(Collectors.groupingBy(person -> person.getAge() > 40));
 
         assertEquals(6, moreThan40Years.get(true).size());
         assertEquals(0, moreThan40Years.get(false).size());
@@ -239,7 +239,7 @@ public class Example2 {
         Map<Boolean, List<Person>> moreThan40Years = lambda.part3.example.Example1.getEmployees()
                                                                                   .stream()
                                                                                   .map(Employee::getPerson)
-                                                                                  .collect(Collectors.partitioningBy(person -> person.getAge() > 10));
+                                                                                  .collect(Collectors.partitioningBy(person -> person.getAge() > 40));
 
         assertEquals(6, moreThan40Years.get(true).size());
         assertEquals(0, moreThan40Years.get(false).size());
@@ -285,7 +285,9 @@ public class Example2 {
         Set<String> names = lambda.part3.example.Example1.getEmployees()
                                                          .stream()
                                                          .map(Employee::getPerson)
-                                                         .collect(Collectors.mapping(Person::getFirstName, Collectors.toSet()));
+                                                         .map(Person::getFirstName)
+                                                         .collect(Collectors.toSet());
+//                                                         .collect(Collectors.mapping(Person::getFirstName, Collectors.toSet()));
 
         assertEquals(5, names.size());
     }
