@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,6 +27,13 @@ public class Exercise1 {
         // TODO функция извлечения длины из строки stringLengthExtractor: String -> Integer
         // TODO функция извлечения длины полного имени из сотрудника fullNameLengthExtractor: Employee -> Integer
         // TODO преобразование списка employees в lengths используя fullNameLengthExtractor
+
+        Function<Employee, Person> personExtractor = Employee::getPerson;
+        Function<Person, String> fullNameExtractor = Person::getFullName;
+        Function<String, Integer> stringLengthExtractor = String::length;
+        Function<Employee, Integer> fullNameLengthExtractor = personExtractor.andThen(fullNameExtractor).andThen(stringLengthExtractor);
+        Consumer<Employee> employeeConsumer = employee -> lengths.add(fullNameLengthExtractor.apply(employee));
+        employees.forEach(employeeConsumer);
 
         assertEquals(Arrays.asList(14, 19, 14, 15, 14, 16), lengths);
     }
