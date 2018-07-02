@@ -78,7 +78,7 @@ public class Exercise2 {
                                      .flatMap(Employee::getJobHistory)
                                      .map(JobHistoryEntry::getPosition)
                                      .flatMap(Exercise2::splitToListOfChar)
-                                     .map(Exercise2::calcCodes1)
+//                                     .map(Exercise2::calcCodes1)
                                      .getMapped();
         assertEquals(calcCodes("dev", "dev", "tester", "dev", "dev", "QA", "QA", "dev", "tester", "tester", "QA", "QA", "QA", "dev"), codes);
     }
@@ -93,15 +93,15 @@ public class Exercise2 {
         return codes;
     }
 
-    private static List<Character> splitToListOfChar(String string) {
+    private static List<Integer> splitToListOfChar(String string) {
         return string.chars()
-                .mapToObj(item -> (char) item)
+                .mapToObj(item -> item)
                 .collect(Collectors.toList());
     }
 
-    private static Integer calcCodes1(Character character) {
-        return (int)character;
-    }
+//    private static Integer calcCodes1(Character character) {
+//        return (int)character;
+//    }
 
     public static List<Employee> getEmployees() {
         return Arrays.asList(
