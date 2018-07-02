@@ -18,20 +18,39 @@ public class Exercise4 {
 
     private static class LazyCollectionHelper<T, R> {
 
+        private final List<R> source;
+        private final Function<R, List<R>> flatMapping;
+
+        private LazyCollectionHelper(List<R> source, Function<R, List<R>> flatMapping) {
+            this.source = source;
+            this.flatMapping = flatMapping;
+        }
+
+
         public static <T> LazyCollectionHelper<T, T> from(List<T> list) {
-            throw new UnsupportedOperationException();
+            return new LazyCollectionHelper<T, T>(list, Collections::singletonList);
         }
 
         public <U> LazyCollectionHelper<T, U> flatMap(Function<R, List<U>> flatMapping) {
-            throw new UnsupportedOperationException();
+            new LazyCollectionHelper<>(source, flatMapping.andThen(list -> {
+                List<U> result = new ArrayList<>();
+                list.forEach(flatMapping.andThen(result::addAll)::apply);
+                return result;
+            }));
         }
 
         public <U> LazyCollectionHelper<T, U> map(Function<R, U> mapping) {
-            throw new UnsupportedOperationException();
+            return new LazyCollectionHelper<>(source, flatMapping.andThen(list -> {
+                                List<U> result = new ArrayList<>();
+                                list.forEach(mapping.andThen(result::add)::apply);
+                                return result;
+            }));
         }
 
         public List<R> force() {
-            throw new UnsupportedOperationException();
+            List<R> result = new ArrayList<R>();
+            source.forEach(flatMapping.andThen(result::addAll)::apply);
+            return result;
         }
     }
 
